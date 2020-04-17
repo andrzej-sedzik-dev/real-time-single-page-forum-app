@@ -18,3 +18,19 @@ php artisan make:model Model/Like -mfr
 
 4)
 php artisan migrate
+
+5)
+Uzupełnienie modelu funkcjami.
+
+
+6)
+Uzupełnianie fabrykii u uzupełnianie bazy (seedind).
+php artisan db:seed
+- po poprawkach błędów czyścimy wszystkie wpisy w bazie danych
+php artisan migrate:fresh
+
+
+
+
+
+
