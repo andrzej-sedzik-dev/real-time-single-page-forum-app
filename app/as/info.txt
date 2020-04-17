@@ -1,0 +1,17 @@
+https://github.com/bitfumes/real-time-single-page-forum-app
+https://github.com/andrzej-sedzik-dev/real-time-single-page-forum-app
+
+
+1) php artisan make:model Model/Question -mfr
+- utworzono w katalogu Model model Question
+- dodano migracje database/migrations/2020_04_17_083039_create_questions_table.php
+- dodano kontroler (resource controler) Controllers/QuestionController.
+
+2)
+php artisan make:controller ReplyController --api
+- kontroler bez funkcji create();
+
+
+3)
+php artisan make:model Model/Category -mfr
+php artisan make:model Model/Like -mfr
