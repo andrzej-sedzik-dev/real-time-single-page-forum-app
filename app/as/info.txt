@@ -15,3 +15,6 @@ php artisan make:controller ReplyController --api
 3)
 php artisan make:model Model/Category -mfr
 php artisan make:model Model/Like -mfr
+
+4)
+php artisan migrate
