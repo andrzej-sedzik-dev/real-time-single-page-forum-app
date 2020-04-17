@@ -31,6 +31,126 @@ php artisan migrate:fresh
 
 
 
+7)
+Route::get('/question', 'QuestionController@index');
+C:\dev\best\back\laravel\udemy\laravue\realtimeApp>php artisan route:list
++--------+----------+--------------+------+-----------------------------------------------+--------------+
+| Domain | Method   | URI          | Name | Action                                        | Middleware   |
++--------+----------+--------------+------+-----------------------------------------------+--------------+
+|        | GET|HEAD | /            |      | Closure                                       | web          |
+|        | GET|HEAD | api/question |      | App\Http\Controllers\QuestionController@index | api          |
+|        | GET|HEAD | api/user     |      | Closure                                       | api,auth:api |
++--------+----------+--------------+------+-----------------------------------------------+--------------+
+
+
+8)
+Route::apiResource('/question', 'QuestionController');
+C:\dev\best\back\laravel\udemy\laravue\realtimeApp>php artisan route:list
++--------+-----------+-------------------------+------------------+-------------------------------------------------+--------------+
+| Domain | Method    | URI                     | Name             | Action                                          | Middleware   |
++--------+-----------+-------------------------+------------------+-------------------------------------------------+--------------+
+|        | GET|HEAD  | /                       |                  | Closure                                         | web          |
+|        | GET|HEAD  | api/question            | question.index   | App\Http\Controllers\QuestionController@index   | api          |
+|        | POST      | api/question            | question.store   | App\Http\Controllers\QuestionController@store   | api          |
+|        | GET|HEAD  | api/question/{question} | question.show    | App\Http\Controllers\QuestionController@show    | api          |
+|        | PUT|PATCH | api/question/{question} | question.update  | App\Http\Controllers\QuestionController@update  | api          |
+|        | DELETE    | api/question/{question} | question.destroy | App\Http\Controllers\QuestionController@destroy | api          |
+|        | GET|HEAD  | api/user                |                  | Closure                                         | api,auth:api |
++--------+-----------+-------------------------+------------------+-------------------------------------------------+--------------+
+
+
+9)
+QuestionController - filling.
+
+9a)
+QuestionController - Resource
+- modydyfikacja tak aby user nie wiedział niektórych danych w rekordzie.
+php artisan make:resource QuestionResource
+Resource created successfully.
+
+
+
+
+BEFORE:
+http://localhost:8000/api/question/3
+public function show(Question $question){return new $question;}
+
+    {
+        "id": 3,
+        "title": "sdafsa",
+        "slug": "adsfdsa",
+        "body": "fdsafdas3",
+        "category_id": 33,
+        "user_id": 3,
+        "created_at": "2020-04-23T16:59:55.000000Z",
+        "updated_at": "2020-04-09T16:59:56.000000Z"
+    }
+
+AFTER:
+http://localhost:8000/api/question/3
+public function show(Question $question){return new QuestionResource($question);}
+- obiekt został opakowany, posiada pole data.
+
+    {
+        "data": {
+            "id": 3,
+            "title": "sdafsa",
+            "slug": "adsfdsa",
+            "body": "fdsafdas3",
+            "category_id": 33,
+            "user_id": 3,
+            "created_at": "2020-04-23T16:59:55.000000Z",
+            "updated_at": "2020-04-09T16:59:56.000000Z"
+        }
+    }
+
+
+9c)
+- konfigurujemy resource, wybieramy które pola nas interesują.
+class QuestionResource extends JsonResource
+{
+    public function toArray($request)
+    {
+        return [
+            'title' => $this->title,
+            'path' => $this->path,
+            'body' => $this->body,
+            'created_at' => $this->created_at,
+            'user' => $this->user->name
+        ];
+    }
+}
+
+// 'user' => $this->user->name // Class 'App\Model\User' not found
+
+{
+    "data": {
+        "title": "sdafsa",
+        "path": "http://localhost:8000/api/question/adsfdsa",
+        "body": "fdsafdas3",
+        "created_at": "2020-04-23T16:59:55.000000Z"
+    }
+}
+
+ 'created_at' => $this->created_at->diffForHumans(),
+
+{
+    "data": {
+        "title": "sdafsa",
+        "path": "http://localhost:8000/api/question/adsfdsa",
+        "body": "fdsafdas3",
+        "created_at": "6 days from now"
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 
